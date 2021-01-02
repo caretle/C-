@@ -1,4 +1,4 @@
-/*ÃÔ¹¬*/ 
+/*è¿·å®«*/ 
 #include<iostream>
 #include<cstdio>
 #include<cstring>
@@ -9,21 +9,21 @@
 #include<queue>
 #include<algorithm>
 #define INF 99999999
-#define SIZE 21     //ÃÔ¹¬´óĞ¡ 
+#define SIZE 21     //è¿·å®«å¤§å° 
 #define bug puts("Hello\n")
 using namespace std;
 struct Node{
     int x,y;
     Node(){x=0;y=0;}
     Node(int x,int y):x(x),y(y){}
-};//´´½¨Ò»¸ö´æ´¢ÁËµãµÄÊı¾İ½á¹¹ 
-int Maze[SIZE][SIZE];  //´´½¨Êı×é 
-vector<Node>maze;//ÓÃÓÚËæ»úÈ¡µã 
-Node Move[4]={Node(-1,0),Node(0,1),Node(1,0),Node(0,-1)};//ÉÏÏÂ×óÓÒÒÆ¶¯£¬ÒÔ00ÎªÖĞĞÄÒÆ¶¯µã 
-int rand(int t){//Ëæ»úÒ»¸ö´Ó0-(t-1)µÄÕûÊı 
+};//åˆ›å»ºä¸€ä¸ªå­˜å‚¨äº†ç‚¹çš„æ•°æ®ç»“æ„ 
+int Maze[SIZE][SIZE];  //åˆ›å»ºæ•°ç»„ 
+vector<Node>maze;//ç”¨äºéšæœºå–ç‚¹ 
+Node Move[4]={Node(-1,0),Node(0,1),Node(1,0),Node(0,-1)};//ä¸Šä¸‹å·¦å³ç§»åŠ¨ï¼Œä»¥00ä¸ºä¸­å¿ƒç§»åŠ¨ç‚¹ 
+int rand(int t){//éšæœºä¸€ä¸ªä»0-(t-1)çš„æ•´æ•° 
     return (int)rand()%t;   
 } 
-void init(){//³õÊ¼»¯ 
+void init(){//åˆå§‹åŒ– 
     memset(Maze,0,sizeof(Maze));
     srand(time(0));
     for(int i=0;i<SIZE/2;i++){
@@ -32,18 +32,18 @@ void init(){//³õÊ¼»¯
         }
     }
 }
-Node RandNode(){//·µ»ØÒ»¸öÁĞ±íÖĞµÄËæ»ú½Úµã 
+Node RandNode(){//è¿”å›ä¸€ä¸ªåˆ—è¡¨ä¸­çš„éšæœºèŠ‚ç‚¹ 
     int temp=rand(maze.size());
     Node Now=maze[temp];
     return Now;
 }
-int FindWay(Node a){//Ñ°ÕÒ¿ÉÒÆ¶¯µÄ·½Ïò 
+int FindWay(Node a){//å¯»æ‰¾å¯ç§»åŠ¨çš„æ–¹å‘ 
     vector<int>temp;
     vector<int>reverse;
     for(int i=0;i<4;i++){
-        int tx=a.x+Move[i].x;//¸ù¾İËæ»úÊı 
+        int tx=a.x+Move[i].x;
         int ty=a.y+Move[i].y;
-        if(tx<0||tx>=SIZE/2||ty<0||ty>=SIZE/2)continue;
+        if(tx<0||tx>=SIZE/2||ty<0||ty>=SIZE/2)continue;//æœç´¢å½“å‰è®¿é—®æ ¼å­çš„å››å‘¨ï¼ˆä¸Šä¸‹å·¦å³ï¼‰çš„æ ¼å­ï¼Œå¦‚æœæ²¡è®¿é—®è¿‡åˆ™æ‰“é€šï¼ˆä¸‹æ¬¡è¯•è¯•éšæœºROLLç‚¹å‡ºè¿·å®«å¥½äº†..)
         if(Maze[tx*2+1][ty*2+1]==1){
             reverse.push_back(i);
             continue;
@@ -51,28 +51,18 @@ int FindWay(Node a){//Ñ°ÕÒ¿ÉÒÆ¶¯µÄ·½Ïò
         temp.push_back(i);
     }
     if(temp.size()==0){
-    //Èç¹ûÎŞ¿ÉÒÆ¶¯·½Ïò£¬Ôò¿ÉÄÜÎªËÀµã£¬½«ÆäËÄÖÜ¿ÉÁªÍ¨µÄ·½ÏòÈ«´òÍ¨ 
+    //å¦‚æœæ— å¯ç§»åŠ¨æ–¹å‘ï¼Œåˆ™å¯èƒ½ä¸ºæ­»ç‚¹ï¼Œå°†å…¶å››å‘¨å¯è”é€šçš„æ–¹å‘å…¨æ‰“é€š 
         for(int i=0;i<4;i++){
             int tempx=a.x*2+1+Move[i].x;
             int tempy=a.y*2+1+Move[i].y;
             if(tempx>0&&tempx<SIZE-1&&tempy>0&&tempy<SIZE-1)
             Maze[tempx][tempy]=1;
         }
-        //Èç¹ûÊÇËÀµã£¬ÔòÉú³ÉÒ»¸ö2*2µÄ·¿¼äÓëÖÜÎ§ÏàÁ¬£¬Îª¸öÈËÓÅ»¯ 
-        for(int i=0;i<=1;i++){
-            for(int j=0;j<=1;j++){
-                int tx=a.x*2+1+i;
-                int ty=a.y*2+1+j;
-                if(tx>0&&tx<SIZE-1&&ty>0&&ty<SIZE-1){
-                    Maze[tx][ty]=1;
-                }
-            } 
-        }
         return -1;
     } 
     else return temp[rand(temp.size())];
 } 
-void Erase(Node t){//É¾³ı½Úµã£¬±£Ö¤Ëæ»úÈ¡µãµÄÕıÈ·ĞÔ 
+void Erase(Node t){//åˆ é™¤èŠ‚ç‚¹ï¼Œä¿è¯éšæœºå–ç‚¹çš„æ­£ç¡®æ€§ 
     int l=-1,r=maze.size();
     while(r-l>1){
         int temp=(l+r)/2;
@@ -84,7 +74,7 @@ void Erase(Node t){//É¾³ı½Úµã£¬±£Ö¤Ëæ»úÈ¡µãµÄÕıÈ·ĞÔ
     Node lt=maze[l];
     maze.erase(maze.begin()+l);
 }
-void Generate(){//Éú³ÉÃÔ¹¬ 
+void Generate(){//ç”Ÿæˆè¿·å®« 
     while(maze.size()){
         Node t=RandNode();
         queue<Node>q;
@@ -103,7 +93,7 @@ void Generate(){//Éú³ÉÃÔ¹¬
         }
     }
 }
-void print(){//´òÓ¡ÃÔ¹¬ 
+void print(){//æ‰“å°è¿·å®« 
     for(int i=0;i<SIZE;i++){
         printf("%d:\t",i);
         for(int j=0;j<SIZE;j++) 
